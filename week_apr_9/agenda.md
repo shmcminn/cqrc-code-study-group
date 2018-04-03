@@ -1,10 +1,14 @@
 # Agenda
 
-#### 1. Fire up a Jupyter notebook
+## Jupyter and virutal environments
 
-#### 2. Go over what a Jupyter notebook does
+#### 1. Create a virtual environment
 
-#### 3. Strings, lists, dictionaries and booleans in Python
+#### 2. Fire up a Jupyter notebook
+
+## Programming basics
+
+#### Strings, lists, dictionaries and booleans in Python
 
 String: 
 ```python
@@ -16,18 +20,39 @@ List:
 ```
 Dictionary (aka JSON): 
 ```python
-{
+dict = {
 "link": "https://www.fbi.gov/file-repository/nics_firearm_checks_-_month_year.pdf/view", 
 "data_desc": "gun background checks", 
 "maintainers": ["Sean", "Randy", "Ryan", "Sara", "Maite"]
 }
+
+dict["data_desc"] ===>
+"gun background checks"
 ```
 Boolean: 
 ```python
 gun_increase = True
 ```
 
-#### 4. Go over libraries like `requests`
+#### We can run built-in methods Python has on any of these types of variables to change them
+
+For example ...
+```
+"gun_data".replace("gun", "nics") ===>
+"nics_data"
+
+["randy", "ryan, "maite"].remove("randy") ===>
+["ryan", "maite"]
+
+list({"month": "Apr", "year": 2018, "gun_count": "NA"}.values()) ===>
+["NA", 2018, "Apr"]
+```
+
+#### We're going to need to learn to use libraries like `requests`
+
+The ones we'll probably be using for this project all have strong documentation you can reference to learn the structure and syntax.
+
+For example:
 
 ```python
 import requests
@@ -59,6 +84,21 @@ prints out:
 ...
 ```
 
-#### 
+You install a library from the command line using `pip` in your virtual environment.
+
+For the above, you need to run this first to install `requests`:
+
+`pip install requests`
+
+
+
+#### Thinking like a programmer
+
+ * Solitaire example
+ * Logical steps to solve this problem of automating gun graphics
+
+
+
+
 
 
