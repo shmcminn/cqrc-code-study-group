@@ -97,6 +97,8 @@ For the above, you need to run this first to install `requests`:
  * [Solitaire example](https://github.com/ireapps/pycar/blob/master/basics/basics_notebook.ipynb)
  * Logical steps to solve this problem of automating gun graphics
 
+#### If time, start down the path of making this thing work
+
 
 
 
