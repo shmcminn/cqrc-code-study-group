@@ -34,7 +34,7 @@ Boolean:
 gun_increase = True
 ```
 
-#### We can run built-in methods Python has on any of these types of variables to change them
+#### We can run built-in Python methods on any of these types of elements to modify them
 
 For example ...
 ```
@@ -94,7 +94,7 @@ For the above, you need to run this first to install `requests`:
 
 #### Thinking like a programmer
 
- * Solitaire example
+ * [Solitaire example](https://github.com/ireapps/pycar/blob/master/basics/basics_notebook.ipynb)
  * Logical steps to solve this problem of automating gun graphics
 
 
