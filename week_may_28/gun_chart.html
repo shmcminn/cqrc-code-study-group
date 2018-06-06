@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<style>
+
+.bar {
+  fill: #11ae97;
+}
+
+/*.bar:hover {
+  fill: brown;
+}*/
+
+.axis--x path {
+  stroke-width: 1px;
+}
+
+.axis--x .tick line {
+  display: none;
+}
+
+.axis--y path {
+  display: none;
+}
+
+h1.chart-title {
+  max-width: 356px;
+  font-family:GothamNarrow-Bold;
+  font-size: 12px;
+}
+
+p {
+  font-family: GothamNarrow-Book;
+  font-size: 9px;
+  max-width: 356px;
+  margin:0px;
+}
+
+.source-text {
+  font-size:7px;
+}
+
+.credit-text {
+  font-size: 7px;
+}
+
+
+</style>
+
+
+<h1 class="chart-title">Gun Background Checks Since 1999</h1>
+<p>FBI chatter goes here and it has more than one line! FBI chatter goes here and it has more than one line! FBI chatter goes here and it has more than one line! FBI chatter goes here and it has more than one line! </p>
+<svg width="356" height="200"></svg>
+<p class="source-text">Source: FBI</p>
+<p class="credit-text">Sean McMinn/Roll Call</p>
+
+
+
+
+<script src="https://d3js.org/d3.v4.min.js"></script>
+<script>
+
+var svg = d3.select("svg"),
+    margin = {"top": 20, "right": 40, "bottom": 20, "left": 60 },
+    width = +svg.attr("width") - margin.left - margin.right,
+    height = +svg.attr("height") - margin.top - margin.bottom;
+
+
+
+
+
+var x = d3.scaleBand().rangeRound([0, width]).padding(0.2),
+    y = d3.scaleLinear().rangeRound([height, 0]);
+
+var topgroup = svg.append("g")
+    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+
+
+d3.csv("nics_data.csv", function(d) {
+  d.Totals = parseInt(d.Totals.split(",").join(""));
+  // d.Totals = d3.ascending(d.Totals);
+  return d;
+}, function(error, data) {
+  if (error) throw error;
+
+  x.domain(data.map(function(d) { return d.Year; }));
+  y.domain([0, d3.max(data, function(d) { return d.Totals; })]);
+
+  topgroup.append("g")
+      .attr("class", "axis axis--x")
+      .attr("transform", "translate(0," + height + ")")
+      .call(d3.axisBottom(x).tickSizeOuter(0));
+
+  topgroup.append("g")
+      .attr("class", "axis axis--y")
+      .call(d3.axisLeft(y).ticks(5));
+
+  topgroup.selectAll(".bar")
+    .data(data)
+    .enter()
+      .append("rect")
+      .attr("class", "bar")
+      .attr("x", function(d) { return x(d.Year); })
+      .attr("y", function(d) {return y(d.Totals); })
+      .attr("width", x.bandwidth())
+      .attr("height", function(d) { return height - y(d.Totals); });
+});
+
+
+
+</script>
