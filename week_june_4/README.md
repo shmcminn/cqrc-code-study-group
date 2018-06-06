@@ -1,6 +1,5 @@
-# May 10 study group
+# June 4 study group
 
-Getting down to some D3
+Going it alone ....
 
-[https://bl.ocks.org/mbostock/3885304](https://bl.ocks.org/mbostock/3885304)
 
