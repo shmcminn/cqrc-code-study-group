@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<style>
+
+.bar {
+  fill: #e77376;
+}
+
+
+.axis--x path {
+  stroke-width: 1px;
+}
+
+.axis--x .tick line {
+  display: none;
+}
+
+.axis--y path {
+  display: none;
+}
+
+h1.chart-title {
+  max-width: 356px;
+  font-family:GothamNarrow-Bold;
+  font-size: 12px;
+}
+
+p {
+  font-family: GothamNarrow-Book;
+  font-size: 9px;
+  max-width: 356px;
+  margin:0px;
+}
+
+.source-text {
+  font-size:7px;
+}
+
+.credit-text {
+  font-size: 7px;
+}
+
+.tick text {
+  text-anchor: end;
+}
+
+.tick line {
+  stroke-width:.5px;
+  stroke: #A1A1A1;
+}
+
+.tick:first-of-type line {
+  stroke-width:1px;
+  stroke:#595959;
+}
+
+.x-tick line {
+  stroke-width:.5px;
+  stroke:#595959;
+}
+
+.x-tick text, .tick text {
+  font-family: GothamNarrow-Book;
+  font-size: 8px;
+  fill: black;
+}
+
+.highlight-num {
+  font-family:GothamNarrow-Bold;
+  fill: black;
+  font-size: 9px;
+}
+
+
+</style>
+
+
+<h1 class="chart-title">Gun Background Checks Since 1999</h1>
+<p>FBI chatter goes here and it has more than one line! FBI chatter goes here and it has more than one line! FBI chatter goes here and it has more than one line! FBI chatter goes here and it has more than one line! </p>
+<svg width="356" height="200"></svg>
+<p class="source-text">Source: FBI</p>
+<p class="credit-text">Sean McMinn/Roll Call</p>
+
+
+
+
+<script src="https://d3js.org/d3.v4.min.js"></script>
+<script>
+
+var svg = d3.select("svg"),
+    margin = {"top": 10, "right": 10, "bottom": 20, "left": 35 },
+    width = +svg.attr("width") - margin.left - margin.right,
+    height = +svg.attr("height") - margin.top - margin.bottom;
+
+
+
+
+
+var x = d3.scaleBand().rangeRound([0, width]).padding(0.2),
+    y = d3.scaleLinear().rangeRound([height, 0]);
+
+var topgroup = svg.append("g")
+    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+
+
+d3.csv("nics_data.csv", function(d) {
+  d.Totals = parseInt(d.Totals.split(",").join(""));
+  // d.Totals = d3.ascending(d.Totals);
+  return d;
+}, function(error, data) {
+  if (error) throw error;
+
+  // filter out before 1999
+  data = data.filter(function(row) {
+    if (row["Year"] > 1998) {
+      return row
+    }
+  })
+
+  x.domain(data.map(function(d) { return d.Year; }));
+  y.domain([0, d3.max(data, function(d) { return d.Totals; })]);
+
+  topgroup.append("g")
+      .attr("class", "axis axis--x")
+      .attr("transform", "translate(0," + height + ")")
+      .call(d3.axisBottom(x).tickSizeOuter(0));
+
+
+
+var formatNumber = d3.format(".1f");
+
+  var yAxis = d3.axisRight(y)
+    .tickSize(width)
+    .tickFormat(function(d) {
+      var s = formatNumber(d / 1e6);
+      return this.parentNode.nextSibling
+          ? s
+          : s + " M";
+    });
+
+  // g.append("g")
+      // .call(customYAxis);
+
+function customYAxis(g) {
+  g.call(yAxis);
+  g.select(".domain").remove();
+  g.selectAll(".tick:not(:first-of-type) line").attr("stroke", "#777");
+  g.selectAll(".tick text").attr("x", -10)
+  // .attr("dy", -4)
+  ;
+}
+
+
+  topgroup.append("g")
+      // .attr("class", "axis axis--y")
+      // .attr("class", "axis axis--y")
+      .call(customYAxis);
+
+  topgroup.selectAll(".bar")
+    .data(data)
+    .enter()
+      .append("rect")
+      .attr("class", "bar")
+      .attr("x", function(d) { return x(d.Year); })
+      .attr("y", function(d) {return y(d.Totals); })
+      .attr("width", x.bandwidth())
+      .attr("height", function(d) { return height - y(d.Totals); });
+
+
+  // skip every other x tick
+
+  var allTicks = d3.selectAll(".axis--x .tick")
+
+  allTicks.attr("class", function(d,i) {
+     if (i%2 != 0) {
+      d3.select(this).remove()
+     };
+   return "x-tick"})
+
+
+
+  // skip every other y tick
+
+
+  var allYTicks = d3.selectAll(".axis--y .tick")
+
+  console.log(allYTicks)
+
+  allYTicks.attr("class", function(d,i) {
+    if (i%2 != 0) {
+      console.log(i)
+      d3.select(this).remove()
+    } 
+  })
+
+
+
+// add text labels to last bars
+
+  var allBars = d3.selectAll(".bar")
+
+
+  var secondToLastBar = allBars._groups[0][allBars._groups[0].length-2]
+  var lastBar = allBars._groups[0][allBars._groups[0].length-1]
+
+
+  var BBoxes = []
+
+  BBoxes.push(lastBar.getBBox());
+  BBoxes.push(secondToLastBar.getBBox());
+
+
+  for (i=0; i<BBoxes.length; i++) {
+    svg.append("text")
+      .attr("class", "highlight-num")
+      .attr("x", BBoxes[i].x)
+      .attr("y", BBoxes[i].y - 2)
+      .attr('transform', "translate(" + margin.left + "," + margin.top + ")")
+      .text("88")
+  }
+
+
+
+
+});
+
+
+
+
+
+</script>
