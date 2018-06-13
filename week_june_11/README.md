@@ -1,5 +1,4 @@
-# June 4 study group
+# June 11 study group
 
-Going it alone ....
-
+Mostly css fixes
 
